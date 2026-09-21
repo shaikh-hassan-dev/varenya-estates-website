@@ -10,6 +10,8 @@
   --color-primary-cta-text: #f0f0f0;
   --color-secondary-cta: #e8e8e8;
   --color-secondary-cta-text: #1a1a1a;
+  /* Reference accent: used ONLY for the menu divider lines (bg-accent/50). */
+  --color-accent: #c89b3c;
 
   --font-sans: 'Inter Variable', sans-serif;
   --radius: 1.5rem;

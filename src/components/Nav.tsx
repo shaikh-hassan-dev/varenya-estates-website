@@ -92,8 +92,7 @@ export function Nav() {
                           <path d="M7 17 17 7" />
                         </svg>
                       </a>
-                      {/* Divider: the reference colours this with its gold accent at 50%; colour withheld pending approval. */}
-                      {i < nav.menu.length - 1 && <div className="h-px" />}
+                      {i < nav.menu.length - 1 && <div className="h-px bg-accent/50" />}
                     </div>
                   ))}
                 </div>

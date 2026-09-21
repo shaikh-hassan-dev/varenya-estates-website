@@ -28,3 +28,6 @@ dist-ssr
 .claude/
 CLAUDE.md
 *.local.json
+
+# Local QA output (never committed)
+qa/

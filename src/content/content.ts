@@ -35,10 +35,23 @@ export const content = {
     country: 'India',
     copyrightYear: '2025',
     reraRegistrationNumber: '', // must stay empty until issued; nothing renders while empty
-    reraLabel: 'MahaRERA Registration No.',
+    reraLabel: 'MahaRERA Agent Registration No.',
   },
 
-  nav: { logoText: 'Varenya Estates', logoTarget: '#hero' },
+  nav: {
+    logoText: 'Varenya Estates',
+    logoTarget: '#hero',
+    menuLabel: 'Menu',
+    menu: [
+      { label: 'Properties', target: '#properties' },
+      { label: 'About', target: '#about' },
+      { label: 'Services', target: '#services' },
+      { label: 'Team', target: '#team' },
+      { label: 'Testimonials', target: '#testimonials' },
+      { label: 'Contact', target: '#contact' },
+    ] satisfies Link[],
+    cta: { label: 'Schedule Viewing', target: '#contact' } satisfies Link,
+  },
 
   hero: {
     eyebrow: 'Premium Collections',
@@ -59,7 +72,7 @@ export const content = {
     intro:
       "With over 15 years of excellence in Mumbai's luxury real estate market, we have established ourselves as the premier boutique agency for discerning international clientele. Our expert team specializes in sourcing and curating the finest properties across Mumbai's most exclusive communities.",
     ctas: [
-      { label: 'Learn Our Story', target: '#about' },
+      { label: 'Learn Our Story', target: '#services' },
       { label: 'Contact Us', target: '#contact' },
     ],
     // Fills the full about block (no fixed ratio); 1029×576 at a 1176px viewport.

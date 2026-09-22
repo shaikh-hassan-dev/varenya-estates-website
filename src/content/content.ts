@@ -18,6 +18,8 @@ export type ImageSlot = {
   sizes?: string
   width?: number
   height?: number
+  /** Art-directed <picture> sources, first matching media wins; the img fields above are the fallback. */
+  sources?: { media: string; srcSet: string; sizes: string; width: number; height: number }[]
 }
 
 export type Property = { name: string; detail: string; price: string; image: ImageSlot }
@@ -44,6 +46,14 @@ const heroPhoto = (file: string, alt: string): ImageSlot => ({
   aspectRatio: '4 / 5',
   width: 400,
   height: 500,
+})
+
+const aboutTier = (media: string, tier: string, width: number, height: number, sizes: string) => ({
+  media,
+  srcSet: `/images/about-sea-view-lounge-${tier}-${width}.webp ${width}w, /images/about-sea-view-lounge-${tier}-${width * 2}.webp ${width * 2}w`,
+  sizes,
+  width,
+  height,
 })
 
 export const content = {
@@ -100,10 +110,18 @@ export const content = {
       { label: 'Contact Us', target: '#contact' },
     ],
     // Covers the whole about block (object-fit: cover), so the box ratio varies by viewport.
+    // Desktop tiers are centred landscape crops of the same columns as the portrait crop, each no wider
+    // in ratio than the narrowest box in its range, so object-cover keeps scaling to width (same framing).
     image: {
+      sources: [
+        aboutTier('(width >= 1536px)', 'd', 1400, 640, 'min(72.5vw, 100rem)'),
+        aboutTier('(width >= 1176px)', 'c', 1260, 705, '(width <= 1440px) 87.5vw, 72.5vw'),
+        aboutTier('(width >= 1024px)', 'b', 1050, 675, '87.5vw'),
+        aboutTier('(width >= 769px)', 'a', 900, 771, '87.5vw'),
+      ],
       src: '/images/about-sea-view-lounge-684.webp',
       srcSet: '/images/about-sea-view-lounge-684.webp 684w, /images/about-sea-view-lounge-1368.webp 1368w',
-      sizes: '(width <= 768px) 80vw, (width <= 1440px) 87.5vw, 72.5vw',
+      sizes: '80vw',
       alt: 'Sea-view lounge with an open terrace',
       aspectRatio: 'auto',
       width: 684,

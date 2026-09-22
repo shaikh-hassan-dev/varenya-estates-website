@@ -10,7 +10,15 @@ export type SectionCopy = {
 }
 
 /** Image slot. `src` stays empty until real photography is supplied; a grey placeholder renders meanwhile. */
-export type ImageSlot = { src: string; alt: string; aspectRatio: string }
+export type ImageSlot = {
+  src: string
+  alt: string
+  aspectRatio: string
+  srcSet?: string
+  sizes?: string
+  width?: number
+  height?: number
+}
 
 export type Property = { name: string; detail: string; price: string; image: ImageSlot }
 export type Service = { title: string; description: string; image: ImageSlot }
@@ -27,6 +35,16 @@ export type Testimonial = {
 export type FooterColumn = { heading: string; links: Link[] }
 
 const slot = (alt: string, aspectRatio: string): ImageSlot => ({ src: '', alt, aspectRatio })
+
+// Hero photos: 4:5 crops at 400×500 (1x) and 800×1000 (2x).
+const heroPhoto = (file: string, alt: string): ImageSlot => ({
+  src: `/images/${file}-400.webp`,
+  srcSet: `/images/${file}-400.webp 1x, /images/${file}-800.webp 2x`,
+  alt,
+  aspectRatio: '4 / 5',
+  width: 400,
+  height: 500,
+})
 
 export const content = {
   site: {
@@ -62,8 +80,14 @@ export const content = {
       { label: 'Explore Properties', target: '#properties' },
       { label: 'Contact Agent', target: '#contact' },
     ],
-    // Desktop slots are 247:300; the reference's mobile marquee crops the same images to 4:5.
-    images: [1, 2, 3, 4, 5].map((n) => slot(`Luxury property ${n}`, '247 / 300')),
+    // Order follows the reference, which repeats its first photo in slot 5.
+    images: [
+      heroPhoto('hero-living-room', 'Living room with floor-to-ceiling windows overlooking city towers'),
+      heroPhoto('hero-skyline-night', 'Mumbai skyline at night reflected in still water'),
+      heroPhoto('hero-sea-view-lounge', 'Open-plan lounge opening onto a sea-view terrace'),
+      heroPhoto('hero-pool-lounge', 'Double-height lounge with glass walls overlooking an infinity pool and the sea'),
+      heroPhoto('hero-living-room', 'Living room with floor-to-ceiling windows overlooking city towers'),
+    ],
   },
 
   about: {
@@ -75,8 +99,16 @@ export const content = {
       { label: 'Learn Our Story', target: '#services' },
       { label: 'Contact Us', target: '#contact' },
     ],
-    // Fills the full about block (no fixed ratio); 1029×576 at a 1176px viewport.
-    image: slot('Varenya Estates office', 'auto'),
+    // Covers the whole about block (object-fit: cover), so the box ratio varies by viewport.
+    image: {
+      src: '/images/about-sea-view-lounge-684.webp',
+      srcSet: '/images/about-sea-view-lounge-684.webp 684w, /images/about-sea-view-lounge-1368.webp 1368w',
+      sizes: '(width <= 768px) 80vw, (width <= 1440px) 87.5vw, 72.5vw',
+      alt: 'Sea-view lounge with an open terrace',
+      aspectRatio: 'auto',
+      width: 684,
+      height: 1000,
+    },
   },
 
   properties: {

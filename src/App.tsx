@@ -1,24 +1,24 @@
 import { content } from './content/content'
 import { Nav } from './components/Nav'
 import { SectionHeader } from './components/SectionHeader'
+import { Hero } from './components/Hero'
+import { Photo } from './components/Photo'
 
-const { hero, about, properties, services, team, numbers, testimonials, cta, footer, site } = content
+const { about, properties, services, team, numbers, testimonials, cta, footer, site } = content
 
 export default function App() {
   return (
     <>
       <Nav />
       <main>
-        <section id="hero" className="relative h-svh md:h-auto pt-25 pb-20 md:pt-30">
-          <div className="flex flex-col items-center gap-12 md:gap-15 w-full md:w-content-width mx-auto">
-            <SectionHeader {...hero} level={1} size="text-7xl 2xl:text-8xl" className="gap-3 w-content-width mx-auto" />
-          </div>
-        </section>
+        <Hero />
 
-        <section id="about" className="py-20">
+        <section id="about" aria-label="About section" className="py-20">
           <div className="relative flex items-center justify-center py-8 md:py-12 mx-auto w-content-width rounded overflow-hidden">
-            {/* Image slot: neutral overlay only until photography is supplied. */}
-            <div className="absolute inset-0 bg-foreground/40 backdrop-blur-xs pointer-events-none select-none" />
+            <div className="absolute inset-0">
+              <Photo image={about.image} />
+              <div className="absolute inset-0 bg-foreground/40 backdrop-blur-xs pointer-events-none select-none" />
+            </div>
             <div className="relative z-10 flex items-center justify-center px-5 py-10 mx-auto min-h-100 md:min-h-120 md:w-1/2 w-content-width">
               <SectionHeader {...about} light className="gap-2" />
             </div>

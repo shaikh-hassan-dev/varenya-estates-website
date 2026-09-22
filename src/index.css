@@ -31,11 +31,23 @@
   --text-7xl: clamp(3rem, 4vw, 4rem);
   --text-8xl: clamp(3.5rem, 4.5vw, 4.5rem);
   --text-9xl: clamp(5.25rem, 7vw, 7rem);
+
+  /* Reference marquee: 15s linear, moves left by half the duplicated track. */
+  --animate-marquee-horizontal: marquee-horizontal 15s linear infinite;
+  @keyframes marquee-horizontal {
+    0% {
+      transform: translate(0);
+    }
+    100% {
+      transform: translate(-50%);
+    }
+  }
 }
 
 @layer base {
   :root {
     --width-content-width: clamp(40rem, 72.5vw, 100rem);
+    --width-x-padding-mask-fade: 5vw;
   }
 
   @media (width >= 769px) and (width <= 1440px) {
@@ -82,6 +94,17 @@
 
 @utility w-content-width {
   width: var(--width-content-width);
+}
+
+/* Fades both horizontal edges (hero marquee). */
+@utility mask-padding-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black var(--width-x-padding-mask-fade),
+    black calc(100% - var(--width-x-padding-mask-fade)),
+    transparent 100%
+  );
 }
 
 @utility rounded {

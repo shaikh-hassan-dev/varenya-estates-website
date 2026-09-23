@@ -48,6 +48,26 @@ const heroPhoto = (file: string, alt: string): ImageSlot => ({
   height: 500,
 })
 
+// 6:7 photos at 620×723 (1x) and 1240×1447 (2x). As in the reference, each photo is reused across
+// slots (property cards are square crops of the same file via object-cover).
+const tallPhoto = (file: string, alt: string, sizes: string): ImageSlot => ({
+  src: `/images/${file}-620.webp`,
+  srcSet: `/images/${file}-620.webp 620w, /images/${file}-1240.webp 1240w`,
+  sizes,
+  alt,
+  aspectRatio: '6 / 7',
+  width: 620,
+  height: 723,
+})
+const propertySizes = '(width < 768px) 77vw, (width < 1536px) 27vw, 22vw'
+const serviceSizes = '(width <= 768px) 80vw, (width < 1536px) 28.2vw, 21vw'
+const photos = {
+  juhu: ['property-juhu-villa', 'Aerial view of tropical villas on a rocky seafront'],
+  worli: ['property-worli-sea-view', 'Sea view towards the Mumbai skyline from a terrace lined with bougainvillea'],
+  malabar: ['property-malabar-hill-bay', 'Terrace garden overlooking the bay and the Mumbai skyline'],
+  livingRoom: ['service-living-room', 'Bright living room with a leather sofa and city-view windows'],
+} as const
+
 const aboutTier = (media: string, tier: string, width: number, height: number, sizes: string) => ({
   media,
   srcSet: `/images/about-sea-view-lounge-${tier}-${width}.webp ${width}w, /images/about-sea-view-lounge-${tier}-${width * 2}.webp ${width * 2}w`,
@@ -137,9 +157,9 @@ export const content = {
     ctas: [{ label: 'See all properties', target: '#properties' }],
     // Prices are ILLUSTRATIVE PROTOTYPE values only, not real listings or offers.
     items: [
-      { name: 'Juhu Beachfront Villa', detail: '5 BHK Villa | Beachfront', price: '₹85,00,00,000', image: slot('Juhu Beachfront Villa', '1 / 1') },
-      { name: 'Worli Sea Face Penthouse', detail: '4 BHK Penthouse | Sea View', price: '₹59,50,00,000', image: slot('Worli Sea Face Penthouse', '1 / 1') },
-      { name: 'Malabar Hill Residence', detail: '4 BHK Residence | Bay View', price: '₹42,00,00,000', image: slot('Malabar Hill Residence', '1 / 1') },
+      { name: 'Juhu Beachfront Villa', detail: '5 BHK Villa | Beachfront', price: '₹85,00,00,000', image: tallPhoto(...photos.juhu, propertySizes) },
+      { name: 'Worli Sea Face Penthouse', detail: '4 BHK Penthouse | Sea View', price: '₹59,50,00,000', image: tallPhoto(...photos.worli, propertySizes) },
+      { name: 'Malabar Hill Residence', detail: '4 BHK Residence | Bay View', price: '₹42,00,00,000', image: tallPhoto(...photos.malabar, propertySizes) },
     ],
   },
 
@@ -147,11 +167,12 @@ export const content = {
     eyebrow: 'Professional Services',
     heading: 'Our Services & Expertise',
     intro: 'Comprehensive real estate solutions tailored to meet your unique needs and aspirations.',
+    carousel: { previous: 'Previous', next: 'Next' },
     items: [
-      { title: 'Property Selection', description: 'Exclusive access to off-market and hand-selected luxury properties.', image: slot('Property Selection', '6 / 7') },
-      { title: 'Investment Advisory', description: 'Expert insights into market trends and investment opportunities.', image: slot('Investment Advisory', '6 / 7') },
-      { title: 'Negotiation & Closing', description: 'Strategic negotiation and seamless transaction management.', image: slot('Negotiation & Closing', '6 / 7') },
-      { title: 'Legal Compliance', description: 'Full support with documentation, permits, and regulatory compliance.', image: slot('Legal Compliance', '6 / 7') },
+      { title: 'Property Selection', description: 'Exclusive access to off-market and hand-selected luxury properties.', image: tallPhoto(...photos.livingRoom, serviceSizes) },
+      { title: 'Investment Advisory', description: 'Expert insights into market trends and investment opportunities.', image: tallPhoto(...photos.juhu, serviceSizes) },
+      { title: 'Negotiation & Closing', description: 'Strategic negotiation and seamless transaction management.', image: tallPhoto(...photos.worli, serviceSizes) },
+      { title: 'Legal Compliance', description: 'Full support with documentation, permits, and regulatory compliance.', image: tallPhoto(...photos.malabar, serviceSizes) },
     ],
   },
 
@@ -257,7 +278,7 @@ export const content = {
   hero: SectionCopy & { images: ImageSlot[] }
   about: SectionCopy & { image: ImageSlot }
   properties: SectionCopy & { items: Property[] }
-  services: SectionCopy & { items: Service[] }
+  services: SectionCopy & { items: Service[]; carousel: { previous: string; next: string } }
   team: SectionCopy & { members: TeamMember[] }
   numbers: SectionCopy & { stats: Stat[] }
   testimonials: SectionCopy & { items: Testimonial[] }

@@ -5,13 +5,27 @@ import { chromium } from 'playwright'
 const [url, label = 'build', shotDir] = process.argv.slice(2)
 const widths = [390, 700, 768, 1024, 1176, 1440, 1920]
 
+// Reference entrance animations fire once per element when it is 20% inside the viewport and finish
+// within 0.04s x words + 0.6s + 0.7s (about 3.1s for the longest paragraph). Scroll the whole page
+// through, wait 4s, then return to the top so every section is captured in its settled state.
+export async function settle(page) {
+  await page.evaluate(() => document.fonts.ready)
+  const height = await page.evaluate(() => document.documentElement.scrollHeight)
+  for (let y = 0; y <= height; y += 300) {
+    await page.evaluate((y) => window.scrollTo(0, y), y)
+    await page.waitForTimeout(80)
+  }
+  await page.waitForTimeout(4000)
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.waitForTimeout(300)
+}
+
 const browser = await chromium.launch()
 const out = {}
 for (const width of widths) {
   const page = await browser.newPage({ viewport: { width, height: 900 } })
   await page.goto(url, { waitUntil: 'networkidle' })
-  await page.evaluate(() => document.fonts.ready)
-  await page.waitForTimeout(2500) // let any entrance animation settle
+  await settle(page)
   if (shotDir && [390, 768, 1176].includes(width)) {
     for (const id of ['hero', 'about']) {
       const el = page.locator(`#${id} section`).or(page.locator(`section#${id}`)).first()

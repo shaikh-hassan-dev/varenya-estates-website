@@ -3,8 +3,10 @@ import { Nav } from './components/Nav'
 import { SectionHeader } from './components/SectionHeader'
 import { Hero } from './components/Hero'
 import { Photo } from './components/Photo'
+import { Properties } from './components/Properties'
+import { Services } from './components/Services'
 
-const { about, properties, services, team, numbers, testimonials, cta, footer, site } = content
+const { about, team, numbers, testimonials, cta, footer, site } = content
 
 export default function App() {
   return (
@@ -25,9 +27,10 @@ export default function App() {
           </div>
         </section>
 
+        <Properties />
+        <Services />
+
         {[
-          { id: 'properties', copy: properties },
-          { id: 'services', copy: services },
           { id: 'team', copy: team },
           { id: 'numbers', copy: numbers },
           { id: 'testimonials', copy: testimonials },

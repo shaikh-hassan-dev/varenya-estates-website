@@ -12,6 +12,8 @@
   --color-secondary-cta-text: #1a1a1a;
   /* Reference accent: used ONLY for the menu divider lines (bg-accent/50). */
   --color-accent: #c89b3c;
+  /* Reference service-card titles use Tailwind's text-white (resting state only). */
+  --color-white: #fff;
 
   --font-sans: 'Inter Variable', sans-serif;
   --radius: 1.5rem;
@@ -48,6 +50,12 @@
   :root {
     --width-content-width: clamp(40rem, 72.5vw, 100rem);
     --width-x-padding-mask-fade: 5vw;
+    --vw-1_5: 1.5vw;
+    /* Reference carousel geometry (services). */
+    --width-carousel-padding: calc((100vw - var(--width-content-width)) / 2 + 1px - 1rem);
+    --width-carousel-padding-controls: calc((100vw - var(--width-content-width)) / 2 + 1px);
+    --width-carousel-item-3: calc(var(--width-content-width) / 3 - var(--vw-1_5) / 3 * 2);
+    --width-carousel-item-4: calc(var(--width-content-width) / 4 - var(--vw-1_5) / 4 * 3);
   }
 
   @media (width >= 769px) and (width <= 1440px) {
@@ -74,6 +82,8 @@
       --text-8xl: 12vw;
       --text-9xl: 14vw;
       --width-content-width: 80vw;
+      --width-carousel-item-3: var(--width-content-width);
+      --width-carousel-item-4: var(--width-content-width);
     }
   }
 
@@ -94,6 +104,27 @@
 
 @utility w-content-width {
   width: var(--width-content-width);
+}
+
+@utility w-carousel-padding {
+  width: var(--width-carousel-padding);
+}
+
+@utility w-carousel-padding-controls {
+  width: var(--width-carousel-padding-controls);
+}
+
+@utility w-carousel-item-3 {
+  width: var(--width-carousel-item-3);
+}
+
+@utility w-carousel-item-4 {
+  width: var(--width-carousel-item-4);
+}
+
+/* Service card bottom blur, fading in from the top. */
+@utility mask-fade-top-overlay {
+  mask-image: linear-gradient(#0000, #000 60%);
 }
 
 /* Fades both horizontal edges (hero marquee). */

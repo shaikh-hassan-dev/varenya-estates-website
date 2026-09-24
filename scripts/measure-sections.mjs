@@ -1,5 +1,5 @@
 // Usage: node scripts/measure-sections.mjs <url> [label] [screenshotDir]
-// Prints hero/about section heights and image boxes per viewport width as JSON.
+// Prints hero, about, properties and services geometry per viewport width as JSON.
 import { chromium } from 'playwright'
 
 const [url, label = 'build', shotDir] = process.argv.slice(2)
@@ -20,6 +20,44 @@ export async function settle(page) {
   await page.waitForTimeout(300)
 }
 
+// Properties and services: boxes are [x, y relative to section top, width, height].
+const sections = (page) =>
+  page.evaluate(() => {
+    const sec = (id) => document.querySelector(`#${id} section`) ?? document.querySelector(`section#${id}`)
+    const r1 = (v) => Math.round(v * 10) / 10
+    const box = (el, top) => { const b = el.getBoundingClientRect(); return [b.x, b.y - top, b.width, b.height].map(r1) }
+    const shown = (el) => el.getBoundingClientRect().width > 0
+    const props = sec('properties')
+    const pTop = props.getBoundingClientRect().top
+    const grid = props.querySelector('.grid')
+    const services = sec('services')
+    const sTop = services.getBoundingClientRect().top
+    const sGrid = services.querySelector('.grid-cols-4')
+    const carousel = sGrid && shown(sGrid) ? null : services.querySelector('.cursor-grab')
+    const sCards = [...services.querySelectorAll('[class*="aspect-6/7"]')].filter(shown)
+    const controls = carousel && carousel.nextElementSibling
+    return {
+      propertiesH: r1(props.getBoundingClientRect().height),
+      propGrid: box(grid, pTop),
+      propCards: [...grid.children].map((c) => {
+        const h3 = c.querySelector('h3')
+        return {
+          card: box(c, pTop),
+          img: box(c.querySelector('img').parentElement, pTop),
+          text: box(c.lastElementChild, pTop),
+          price: c.querySelector('span').getBoundingClientRect().width.toFixed(1),
+          titleTruncated: h3.scrollWidth > h3.clientWidth,
+        }
+      }),
+      servicesH: r1(services.getBoundingClientRect().height),
+      servicesMode: carousel ? 'carousel' : 'grid',
+      serviceCards: sCards.map((c) => box(c, sTop)),
+      serviceTitle: box(sCards[0].querySelector('h3'), sTop),
+      flip: box(sCards[0].querySelector('.size-8'), sTop),
+      controls: controls ? { row: box(controls, sTop), progress: box(controls.querySelector('.h-2'), sTop), buttons: [...controls.querySelectorAll('button')].map((b) => [...box(b, sTop), b.disabled]) } : null,
+    }
+  })
+
 const browser = await chromium.launch()
 const out = {}
 for (const width of widths) {
@@ -27,12 +65,12 @@ for (const width of widths) {
   await page.goto(url, { waitUntil: 'networkidle' })
   await settle(page)
   if (shotDir && [390, 768, 1176].includes(width)) {
-    for (const id of ['hero', 'about']) {
+    for (const id of ['hero', 'about', 'properties', 'services']) {
       const el = page.locator(`#${id} section`).or(page.locator(`section#${id}`)).first()
       await el.screenshot({ path: `${shotDir}/${label}-${id}-${width}.png`, animations: 'disabled' })
     }
   }
-  out[width] = await page.evaluate(() => {
+  out[width] = { ...(await sections(page)), ...(await page.evaluate(() => {
     const sec = (id) => document.querySelector(`#${id} section`) ?? document.querySelector(`section#${id}`)
     const hero = sec('hero')
     const about = sec('about')
@@ -57,7 +95,7 @@ for (const width of widths) {
       aboutImg: rect(about.querySelector('img') ?? about.querySelector('.absolute')),
       aboutBox: rect(about.firstElementChild),
     }
-  })
+  })) }
   await page.close()
 }
 await browser.close()

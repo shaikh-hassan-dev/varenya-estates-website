@@ -217,7 +217,7 @@ export const content = {
     members: [
       { name: 'Siddharth Kulkarni', role: 'CEO', image: teamPhoto('team-siddharth-kulkarni', 'Siddharth Kulkarni, CEO, in a navy suit in a bright office') },
       { name: 'Meera Raghunathan', role: 'COO', image: teamPhoto('team-meera-raghunathan', 'Meera Raghunathan, COO, in a navy blazer with arms crossed') },
-      { name: 'Kabir Malhotra', role: 'CIO', image: teamPhoto('team-kabir-malhotra', 'Kabir Malhotra, CIO, in a navy blazer with arms crossed') },
+      { name: 'Kabir Malhotra', role: 'CIO', image: teamPhoto('team-kabir-malhotra', 'Kabir Malhotra, CIO, in a grey suit at his desk in a bright office') },
     ],
   },
 

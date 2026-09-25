@@ -25,7 +25,7 @@ export type ImageSlot = {
 export type Property = { name: string; detail: string; price: string; image: ImageSlot }
 export type Service = { title: string; description: string; image: ImageSlot }
 export type TeamMember = { name: string; role: string; image: ImageSlot }
-export type Stat = { label: string; value: string }
+export type Stat = { label: string; value: string; icon: 'house' | 'users' | 'dollar-sign' | 'trending-up' }
 export type Testimonial = {
   tag: string
   title: string
@@ -33,10 +33,9 @@ export type Testimonial = {
   name: string
   date: string
   avatar: ImageSlot
+  image: ImageSlot
 }
 export type FooterColumn = { heading: string; links: Link[] }
-
-const slot = (alt: string, aspectRatio: string): ImageSlot => ({ src: '', alt, aspectRatio })
 
 // Hero photos: 4:5 crops at 400×500 (1x) and 800×1000 (2x).
 const heroPhoto = (file: string, alt: string): ImageSlot => ({
@@ -67,6 +66,39 @@ const photos = {
   malabar: ['property-malabar-hill-bay', 'Terrace garden overlooking the bay and the Mumbai skyline'],
   livingRoom: ['service-living-room', 'Bright living room with a leather sofa and city-view windows'],
 } as const
+
+// Team portraits: 4:5 crops at 450×563 and 900×1125. As in the reference, each portrait is reused
+// as the matching testimonial avatar (circle crop at 48 and 96 px). Avatars sit beside the client name,
+// so they are decorative (empty alt).
+const teamSizes = '(width <= 768px) 80vw, (width <= 1440px) 29vw, 24vw'
+const teamPhoto = (file: string, alt: string): ImageSlot => ({
+  src: `/images/${file}-450.webp`,
+  srcSet: `/images/${file}-450.webp 450w, /images/${file}-900.webp 900w`,
+  sizes: teamSizes,
+  alt,
+  aspectRatio: '4 / 5',
+  width: 450,
+  height: 563,
+})
+const avatar = (file: string, alt: string): ImageSlot => ({
+  src: `/images/${file}-avatar-48.webp`,
+  srcSet: `/images/${file}-avatar-48.webp 1x, /images/${file}-avatar-96.webp 2x`,
+  alt,
+  aspectRatio: '1 / 1',
+  width: 48,
+  height: 48,
+})
+// Testimonial n reuses property photo n, as the reference does. On mobile the card height follows the
+// photo's natural aspect, so these crops keep the reference files' ratios (3:2, then 1368:2000 twice).
+const testimonialPhoto = (file: string, alt: string, w: number, h: number, sizes: string): ImageSlot => ({
+  src: `/images/${file}-${w}.webp`,
+  srcSet: `/images/${file}-${w}.webp ${w}w, /images/${file}-${w * 2}.webp ${w * 2}w`,
+  sizes,
+  alt,
+  aspectRatio: `${w} / ${h}`,
+  width: w,
+  height: h,
+})
 
 const aboutTier = (media: string, tier: string, width: number, height: number, sizes: string) => ({
   media,
@@ -167,7 +199,6 @@ export const content = {
     eyebrow: 'Professional Services',
     heading: 'Our Services & Expertise',
     intro: 'Comprehensive real estate solutions tailored to meet your unique needs and aspirations.',
-    carousel: { previous: 'Previous', next: 'Next' },
     items: [
       { title: 'Property Selection', description: 'Exclusive access to off-market and hand-selected luxury properties.', image: tallPhoto(...photos.livingRoom, serviceSizes) },
       { title: 'Investment Advisory', description: 'Expert insights into market trends and investment opportunities.', image: tallPhoto(...photos.juhu, serviceSizes) },
@@ -176,14 +207,17 @@ export const content = {
     ],
   },
 
+  // Carousel control labels shared by every carousel (reference wording; slide dots are numbered).
+  carousel: { previous: 'Previous', next: 'Next', goToSlide: 'Go to slide' },
+
   team: {
     eyebrow: 'Our Leadership',
     heading: 'Executive Team',
     intro: 'Meet the visionary leaders guiding Varenya Estates with expertise and dedication.',
     members: [
-      { name: 'Siddharth Kulkarni', role: 'CEO', image: slot('Siddharth Kulkarni', '4 / 5') },
-      { name: 'Meera Raghunathan', role: 'COO', image: slot('Meera Raghunathan', '4 / 5') },
-      { name: 'Kabir Malhotra', role: 'CIO', image: slot('Kabir Malhotra', '4 / 5') },
+      { name: 'Siddharth Kulkarni', role: 'CEO', image: teamPhoto('team-siddharth-kulkarni', 'Siddharth Kulkarni, CEO, in a navy suit in a bright office') },
+      { name: 'Meera Raghunathan', role: 'COO', image: teamPhoto('team-meera-raghunathan', 'Meera Raghunathan, COO, in a navy blazer with arms crossed') },
+      { name: 'Kabir Malhotra', role: 'CIO', image: teamPhoto('team-kabir-malhotra', 'Kabir Malhotra, CIO, in a navy blazer with arms crossed') },
     ],
   },
 
@@ -192,10 +226,10 @@ export const content = {
     heading: 'By The Numbers',
     intro: "Our proven track record speaks to our commitment and success in Mumbai's luxury real estate market.",
     stats: [
-      { label: 'Properties Sold', value: '450+' },
-      { label: 'Satisfied Clients', value: '650+' },
-      { label: 'Total Value (₹ Cr)', value: '4,500' },
-      { label: 'Countries', value: '45' },
+      { label: 'Properties Sold', value: '450+', icon: 'house' },
+      { label: 'Satisfied Clients', value: '650+', icon: 'users' },
+      { label: 'Total Value (₹ Cr)', value: '4,500', icon: 'dollar-sign' },
+      { label: 'Countries', value: '45', icon: 'trending-up' },
     ],
   },
 
@@ -211,7 +245,8 @@ export const content = {
           'The team at Varenya Estates demonstrated outstanding knowledge of the Mumbai market. Their negotiation skills saved me significant time and money. I would not hesitate to recommend them for any luxury property transaction.',
         name: 'Arvind Venkatesh',
         date: 'September 2024',
-        avatar: slot('Arvind Venkatesh', '1 / 1'),
+        avatar: avatar('team-siddharth-kulkarni', ''),
+        image: testimonialPhoto('testimonial-juhu-villa', photos.juhu[1], 900, 600, '(width <= 768px) 160vw, 53vw'),
       },
       {
         tag: 'Penthouse Collection',
@@ -220,7 +255,8 @@ export const content = {
           'Finding a penthouse that matched my exacting standards seemed impossible, yet within weeks, the team presented three exceptional options. Their professionalism and attention to detail were impeccable throughout.',
         name: 'Priya Sharma',
         date: 'August 2024',
-        avatar: slot('Priya Sharma', '1 / 1'),
+        avatar: avatar('team-meera-raghunathan', ''),
+        image: testimonialPhoto('testimonial-worli-sea-view', photos.worli[1], 560, 819, '(width <= 768px) 68vw, 35vw'),
       },
       {
         tag: 'Investment Advisory',
@@ -229,7 +265,8 @@ export const content = {
           'As a foreign investor, I appreciated the comprehensive legal and financial guidance. The team navigated complex regulations effortlessly, allowing me to invest with complete confidence.',
         name: 'Rohan Mehta',
         date: 'July 2024',
-        avatar: slot('Rohan Mehta', '1 / 1'),
+        avatar: avatar('team-kabir-malhotra', ''),
+        image: testimonialPhoto('testimonial-malabar-hill-bay', photos.malabar[1], 560, 819, '(width <= 768px) 68vw, 35vw'),
       },
     ],
   },
@@ -278,7 +315,8 @@ export const content = {
   hero: SectionCopy & { images: ImageSlot[] }
   about: SectionCopy & { image: ImageSlot }
   properties: SectionCopy & { items: Property[] }
-  services: SectionCopy & { items: Service[]; carousel: { previous: string; next: string } }
+  services: SectionCopy & { items: Service[] }
+  carousel: { previous: string; next: string; goToSlide: string }
   team: SectionCopy & { members: TeamMember[] }
   numbers: SectionCopy & { stats: Stat[] }
   testimonials: SectionCopy & { items: Testimonial[] }

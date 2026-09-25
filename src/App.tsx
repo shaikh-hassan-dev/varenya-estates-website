@@ -5,8 +5,11 @@ import { Hero } from './components/Hero'
 import { Photo } from './components/Photo'
 import { Properties } from './components/Properties'
 import { Services } from './components/Services'
+import { Team } from './components/Team'
+import { Metrics } from './components/Metrics'
+import { Testimonials } from './components/Testimonials'
 
-const { about, team, numbers, testimonials, cta, footer, site } = content
+const { about, cta, footer, site } = content
 
 export default function App() {
   return (
@@ -30,15 +33,9 @@ export default function App() {
         <Properties />
         <Services />
 
-        {[
-          { id: 'team', copy: team },
-          { id: 'numbers', copy: numbers },
-          { id: 'testimonials', copy: testimonials },
-        ].map(({ id, copy }) => (
-          <section key={id} id={id} className="py-20">
-            <SectionHeader {...copy} />
-          </section>
-        ))}
+        <Team />
+        <Metrics />
+        <Testimonials />
 
         <section id="contact" className="py-20">
           <div className="w-content-width mx-auto">

@@ -25,7 +25,7 @@ export type ImageSlot = {
 export type Property = { name: string; detail: string; price: string; image: ImageSlot }
 export type Service = { title: string; description: string; image: ImageSlot }
 export type TeamMember = { name: string; role: string; image: ImageSlot }
-export type Stat = { label: string; value: string; icon: 'house' | 'users' | 'dollar-sign' | 'trending-up' }
+export type Stat = { label: string; value: string; icon: 'house' | 'users' | 'indian-rupee' | 'trending-up' }
 export type Testimonial = {
   tag: string
   title: string
@@ -228,7 +228,7 @@ export const content = {
     stats: [
       { label: 'Properties Sold', value: '450+', icon: 'house' },
       { label: 'Satisfied Clients', value: '650+', icon: 'users' },
-      { label: 'Total Value (₹ Cr)', value: '4,500', icon: 'dollar-sign' },
+      { label: 'Total Value (₹ Cr)', value: '4,500', icon: 'indian-rupee' },
       { label: 'Countries', value: '45', icon: 'trending-up' },
     ],
   },

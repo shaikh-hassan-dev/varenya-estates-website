@@ -5,7 +5,7 @@ import { SectionHeader } from './SectionHeader'
 
 const { numbers } = content
 
-// Lucide icons used by the reference (same version's path data).
+// Lucide icons used by the reference (same version's path data); indian-rupee replaces dollar-sign (D-18).
 const icons: Record<Stat['icon'], React.ReactNode> = {
   house: (
     <>
@@ -21,10 +21,13 @@ const icons: Record<Stat['icon'], React.ReactNode> = {
       <circle cx="9" cy="7" r="4" />
     </>
   ),
-  'dollar-sign': (
+  'indian-rupee': (
     <>
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      <path d="M6 3h12" />
+      <path d="M6 8h12" />
+      <path d="m6 13 8.5 8" />
+      <path d="M6 13h3" />
+      <path d="M9 13c6.667 0 6.667-10 0-10" />
     </>
   ),
   'trending-up': (

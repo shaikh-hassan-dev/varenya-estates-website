@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { content } from '../content/content'
 import { Button } from './Button'
+import { reducedMotion, scrollToTop } from '../motion'
 
 const { nav } = content
 
@@ -22,7 +23,7 @@ export function Nav() {
 
   const goTo = (e: MouseEvent, target: string) => {
     e.preventDefault()
-    document.getElementById(target.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(target.slice(1))?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
     close()
   }
 
@@ -36,7 +37,15 @@ export function Nav() {
       <nav className="fixed z-1000 top-5 left-1/2 -translate-x-1/2 w-content-width">
         <div className="mx-auto w-full md:w-1/2 overflow-hidden rounded backdrop-blur-sm card">
           <div className="relative z-10 flex items-center justify-between gap-3 xl:gap-4 2xl:gap-5 p-3 xl:p-4 2xl:p-5">
-            <a href={nav.logoTarget} className="text-xl font-medium text-foreground">
+            {/* The reference logo links to "/"; here it scrolls to the top without changing the URL. */}
+            <a
+              href={nav.logoTarget}
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToTop()
+              }}
+              className="text-xl font-medium text-foreground"
+            >
               {nav.logoText}
             </a>
             <button
@@ -97,7 +106,7 @@ export function Nav() {
                   ))}
                 </div>
                 {/* As in the reference, the menu CTA does not close the menu. */}
-                <Button {...nav.cta} className="w-full" />
+                <Button {...nav.cta} className="w-full" animate={false} />
               </div>
             </div>
           </div>

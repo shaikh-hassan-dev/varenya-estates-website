@@ -1,5 +1,6 @@
 import { content } from '../content/content'
 import { Photo } from './Photo'
+import { Reveal } from './Reveal'
 import { SectionHeader } from './SectionHeader'
 
 const { hero } = content
@@ -38,7 +39,7 @@ export function Hero() {
         <SectionHeader {...hero} level={1} size="text-7xl 2xl:text-8xl" className="gap-3 w-content-width mx-auto" />
 
         {/* Mobile: seamless marquee (track duplicated, animation moves it by half). Paused for reduced motion. */}
-        <div className="block md:hidden w-full overflow-hidden mask-padding-x">
+        <Reveal delay={0.2} className="block md:hidden w-full overflow-hidden mask-padding-x">
           <div className="flex w-max animate-marquee-horizontal motion-reduce:[animation-play-state:paused]">
             {[...hero.images, ...hero.images].map((image, i) => (
               <div key={i} aria-hidden={i >= hero.images.length || undefined} className={`shrink-0 w-[50vw] mr-5 aspect-4/5 ${card}`}>
@@ -46,9 +47,9 @@ export function Hero() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
 
-        <div className="hidden md:flex justify-center items-center w-full">
+        <Reveal delay={0.2} className="hidden md:flex justify-center items-center w-full">
           {/* w-full: the reference wrapper shrink-wraps and settles at full width once images load;
               fixing it at full width gives the same layout without the load-time shift. */}
           <div className="flex items-center justify-center w-full">
@@ -61,7 +62,7 @@ export function Hero() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )

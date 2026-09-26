@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
 import { content } from '../content/content'
 import { Photo } from './Photo'
+import { Reveal } from './Reveal'
 import { SectionHeader } from './SectionHeader'
 
 type EmblaCarouselType = NonNullable<UseEmblaCarouselType[1]>
@@ -25,7 +26,7 @@ export function Testimonials() {
     <section id="testimonials" aria-label="Testimonials section" className="py-20">
       <div className="flex flex-col gap-8 md:gap-10">
         <SectionHeader {...testimonials} />
-        <div className="flex flex-col">
+        <Reveal className="flex flex-col">
           <div ref={viewportRef} className="overflow-hidden">
             <div className="flex">
               {testimonials.items.map((t) => (
@@ -76,7 +77,7 @@ export function Testimonials() {
               />
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )

@@ -2,6 +2,7 @@ import { Children, useCallback, useEffect, useState, type ReactNode } from 'reac
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
 import { content } from '../content/content'
 import { icon } from './icon'
+import { Reveal } from './Reveal'
 
 type EmblaCarouselType = NonNullable<UseEmblaCarouselType[1]>
 const { carousel } = content
@@ -38,15 +39,15 @@ export function GridOrCarousel({ children }: { children: ReactNode }) {
   if (items.length <= 3) {
     const cols = items.length === 3 ? 'md:grid-cols-3' : items.length === 2 ? 'md:grid-cols-2' : ''
     return (
-      <div>
+      <Reveal>
         <div className={`grid grid-cols-1 gap-5 mx-auto w-content-width ${cols}`}>{children}</div>
-      </div>
+      </Reveal>
     )
   }
   const four = items.length === 4
 
   return (
-    <div>
+    <Reveal>
       {four && <div className="hidden 2xl:grid grid-cols-4 gap-5 mx-auto w-content-width">{children}</div>}
       <div className={`flex flex-col gap-5 w-full overflow-hidden ${four ? '2xl:hidden' : ''}`}>
         <div ref={viewportRef} className="w-full cursor-grab">
@@ -85,6 +86,6 @@ export function GridOrCarousel({ children }: { children: ReactNode }) {
           <div className="shrink-0 w-carousel-padding-controls" />
         </div>
       </div>
-    </div>
+    </Reveal>
   )
 }

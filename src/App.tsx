@@ -5,6 +5,7 @@ import { Hero } from './components/Hero'
 import { Photo } from './components/Photo'
 import { Properties } from './components/Properties'
 import { Services } from './components/Services'
+import { Reveal } from './components/Reveal'
 import { scrollToTarget } from './motion'
 import { Team } from './components/Team'
 import { Metrics } from './components/Metrics'
@@ -40,9 +41,11 @@ export default function App() {
 
         <section id="contact" aria-label="Contact section" className="py-20">
           <div className="w-content-width mx-auto">
-            <div className="flex flex-col items-center gap-8 md:gap-10 py-20 px-8 rounded card">
-              <SectionHeader {...cta} size="text-5xl 2xl:text-6xl" className="gap-2" />
-            </div>
+            <Reveal>
+              <div className="flex flex-col items-center gap-8 md:gap-10 py-20 px-8 rounded card">
+                <SectionHeader {...cta} size="text-5xl 2xl:text-6xl" className="gap-2" />
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>

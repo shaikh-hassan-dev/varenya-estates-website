@@ -5,7 +5,18 @@ import { onceInView, reducedMotion, wordEase } from '../motion'
 // Reference TextAnimation "slide-up": the text is split into inline-block words that rise from
 // y 50% with opacity 0→1 (0.6s, stagger 0.04s) once 20% inside the viewport. 0.7s after the last
 // word lands, the words are replaced by the plain text, so the settled DOM is a single text node.
-export function AnimatedText({ text, tag: Tag, className }: { text: string; tag: 'h1' | 'h2' | 'p'; className: string }) {
+// Headings receive their gradient classes at that point, as in the reference.
+export function AnimatedText({
+  text,
+  tag: Tag,
+  className,
+  gradient = '',
+}: {
+  text: string
+  tag: 'h1' | 'h2' | 'p'
+  className: string
+  gradient?: string
+}) {
   const ref = useRef<HTMLElement>(null)
   const [done, setDone] = useState(reducedMotion)
 
@@ -32,7 +43,7 @@ export function AnimatedText({ text, tag: Tag, className }: { text: string; tag:
   }, [done])
 
   return (
-    <Tag ref={ref as never} className={className}>
+    <Tag ref={ref as never} className={done ? `${gradient} ${className}` : className}>
       {done
         ? text
         : text.split(' ').map((word, i) => (

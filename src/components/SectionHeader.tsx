@@ -7,7 +7,7 @@ import { Reveal } from './Reveal'
 const tagReveal = { y: 10, duration: 0.4, margin: '-15%' }
 
 type Props = SectionCopy & {
-  /** Hero renders an H1 with the reference's gradient-clipped text. */
+  /** Hero renders an H1; every heading gets the reference's gradient-clipped text once animated in. */
   level?: 1 | 2
   /** Heading size utilities; defaults to the reference's section H2 scale. */
   size?: string
@@ -27,7 +27,8 @@ export function SectionHeader({
   className = 'gap-2 w-content-width mx-auto',
 }: Props) {
   const tone = light ? 'text-primary-cta-text' : 'md:max-w-8/10'
-  const gradient = level === 1 ? 'bg-gradient-to-r from-foreground to-primary-cta bg-clip-text text-transparent pb-[0.1em] -mb-[0.1em]' : ''
+  // Reference settled state. Over the about image the light text colour wins, so the text stays opaque.
+  const gradient = `bg-gradient-to-r from-foreground to-primary-cta bg-clip-text ${light ? '' : 'text-transparent'} pb-[0.1em] -mb-[0.1em]`
 
   return (
     <div className={`flex flex-col items-center text-center ${className}`}>
@@ -43,7 +44,8 @@ export function SectionHeader({
       <AnimatedText
         tag={level === 1 ? 'h1' : 'h2'}
         text={heading}
-        className={`${gradient} ${tone} ${size} leading-[1.15] font-semibold text-center text-balance`}
+        gradient={gradient}
+        className={`${tone} ${size} leading-[1.15] font-semibold text-center text-balance`}
       />
       {intro && (
         <AnimatedText

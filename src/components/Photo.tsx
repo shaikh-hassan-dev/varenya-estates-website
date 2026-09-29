@@ -11,7 +11,6 @@ export function Photo({ image, eager = false, className = '' }: { image: ImageSl
       width={width}
       height={height}
       loading={eager ? 'eager' : 'lazy'}
-      fetchPriority={eager ? 'high' : undefined}
       decoding="async"
       className={`w-full h-full min-h-0 object-cover rounded ${className}`}
     />

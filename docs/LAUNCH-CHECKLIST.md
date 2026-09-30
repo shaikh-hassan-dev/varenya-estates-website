@@ -12,3 +12,5 @@
 | L-06 | Review non-functional affordances: the property card pointer cursor and hover arrow, and links that point to `#` (footer Resources and Legal). | Open |
 | L-07 | Replace the testimonials with genuine client testimonials published with written consent, including client images. | Open |
 | L-08 | Remove the crawl block in `public/robots.txt` (currently `Disallow: /`) and review the page title, description and favicon. | Open |
+| L-09 | Review colour contrast of the footer text (3.24:1) and inactive testimonial dots (1.11:1) against WCAG 2.1 SC 1.4.3 and 1.4.11 before public launch. | Open |
+| L-10 | Verify the site in desktop Firefox and in Safari on iPhone and Mac via a private preview link. Not verifiable on the development PC (Windows Smart App Control blocks the Playwright browser dependency checker). | Open |
